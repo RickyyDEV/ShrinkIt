@@ -8,6 +8,8 @@ services:
     labels:
       caddy: shrinkit.rihosting.com.br
       caddy.reverse_proxy: "{{upstreams 3000}}"
+    ports:
+      - "3000:3000"
 
 networks:
   caddy:

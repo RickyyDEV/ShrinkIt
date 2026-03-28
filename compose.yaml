@@ -5,5 +5,10 @@ services:
       dockerfile: Dockerfile
     container_name: shrinkitwebv2
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    labels:
+      caddy: shrinkit.rihosting.com.br
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+
+networks:
+  caddy:
+    external: true

@@ -1,8 +1,26 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+
+const redis = new Redis({
+  host: "localhost",
+  port: 6379,
+});
+
 export default defineConfig({
-  plugins: [tailwindcss(), vinext()],
+  plugins: [
+    babel({
+      presets: [
+        reactCompilerPreset({
+          target: "19",
+        }),
+      ],
+    }),
+    tailwindcss(),
+    vinext(),
+  ],
   resolve: {
     tsconfigPaths: true,
   },

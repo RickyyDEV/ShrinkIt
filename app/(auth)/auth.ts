@@ -4,6 +4,10 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { env } from "@/env";
 import { prisma } from "../(database)/database";
 
+const redis = new Redis({
+  host: "localhost",
+  port: 6379,
+});
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",

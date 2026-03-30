@@ -4,11 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 
-const redis = new Redis({
-  host: "localhost",
-  port: 6379,
-});
-
 export default defineConfig({
   plugins: [
     babel({

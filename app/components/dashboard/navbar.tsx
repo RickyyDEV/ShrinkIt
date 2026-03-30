@@ -23,6 +23,7 @@ import {
   AvatarImage,
 } from "@/app/components/ui/avatar";
 import { authClient } from "@/app/(auth)/auth-client";
+import { LogOut } from "@/app/(auth)/actions";
 
 export default function DashboardNav() {
   const { state } = useSidebar();
@@ -89,13 +90,8 @@ export default function DashboardNav() {
                 </div>
                 <Button
                   onClick={async () => {
-                    await authClient.signOut({
-                      fetchOptions: {
-                        onSuccess: () => {
-                          router.push("/auth/login");
-                        },
-                      },
-                    });
+                    const logout = await LogOut();
+                    if (logout) router.push("/auth/");
                   }}
                   variant={"destructive"}
                   className={"rounded-md"}

@@ -13,6 +13,12 @@ export async function GoogleLogin() {
   });
 }
 
+export async function LogOut() {
+  return await auth.api.signOut({
+    headers: await headers(),
+  });
+}
+
 export async function getSession() {
   return await auth.api.getSession({
     headers: await headers(),

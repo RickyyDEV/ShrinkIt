@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
-
+import "./env";
 export default defineConfig({
   plugins: [
     babel({
@@ -23,6 +23,6 @@ export default defineConfig({
     exclude: ["pg", "pg-native"],
   },
   ssr: {
-    external: ["pg", "pg-native"],
+    external: ["pg", "pg-nat  ive"],
   },
 });

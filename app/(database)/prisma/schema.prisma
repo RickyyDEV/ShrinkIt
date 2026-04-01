@@ -72,12 +72,18 @@ model Verification {
 }
 
 model Url {
-  id     String @id
-  code   String
-  url    String
-  owner  User   @relation(fields: [userId], references: [id])
-  userId String
+  id        Int      @id @default(autoincrement())
+  code      String   @unique @default(dbgenerated("substring(md5(random()::text), 1, 8)"))
+  url       String
+  accesses  Int      @default(0)
 
-  @@index([id])
+  owner     User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  @@unique([createdAt, id])
+  @@index([userId])
   @@map("url")
 }

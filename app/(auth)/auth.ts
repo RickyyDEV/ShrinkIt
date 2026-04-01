@@ -11,21 +11,20 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-	secondaryStorage: {
-		get: async (key) => {
-			return await client.get(key);
-		},
-		set: async (key, value, ttl) => {
-			if (ttl) {
+  secondaryStorage: {
+    get: async (key) => {
+      return await client.get(key);
+    },
+    set: async (key, value, ttl) => {
+      if (ttl) {
         await client.set(key, value);
-        await client.expire(key, ttl)
-      }
-			else await client.set(key, value);
-		},
-		delete: async (key) => {
-			await client.del(key);
-		},
-	},
+        await client.expire(key, ttl);
+      } else await client.set(key, value);
+    },
+    delete: async (key) => {
+      await client.del(key);
+    },
+  },
   baseURL: env.BETTER_AUTH_URL,
   experimental: { joins: true },
   socialProviders: {

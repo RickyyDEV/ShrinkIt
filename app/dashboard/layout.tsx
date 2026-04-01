@@ -1,10 +1,11 @@
 import { headers } from "vinext/shims/headers";
 import SidebarWrapper from "./layout-wrapper";
-import type { Metadata } from "vinext/shims/metadata";
 import { auth } from "../(auth)/auth";
 import { redirect } from "vinext/shims/navigation";
 import { SessionProvider } from "../(auth)/user-context";
 import { TooltipProvider } from "../components/ui/tooltip";
+import { Providers } from "../rpc/client/providers";
+import { Toaster } from "../components/ui/sonner";
 
 export default async function Layout({
   children,
@@ -20,9 +21,12 @@ export default async function Layout({
       <body>
         <main>
           <SessionProvider value={{ user: user.user, session: user.session }}>
-            <TooltipProvider>
-              <SidebarWrapper>{children}</SidebarWrapper>
-            </TooltipProvider>
+            <Providers>
+              <TooltipProvider>
+                <SidebarWrapper>{children}</SidebarWrapper>
+                <Toaster />
+              </TooltipProvider>
+            </Providers>
           </SessionProvider>
         </main>
       </body>

@@ -13,7 +13,7 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { usePathname, useRouter } from "vinext/shims/navigation";
-import { LayoutDashboard, Link, LogOutIcon } from "lucide-react";
+import { LayoutDashboard, LinkIcon, LogOutIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "@/app/(auth)/user-context";
 import { cn } from "../lib/utils";
@@ -24,6 +24,7 @@ import {
 } from "@/app/components/ui/avatar";
 import { authClient } from "@/app/(auth)/auth-client";
 import { LogOut } from "@/app/(auth)/actions";
+import Link from "vinext/shims/link";
 
 export default function DashboardNav() {
   const { state } = useSidebar();
@@ -34,40 +35,44 @@ export default function DashboardNav() {
     <>
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="items-center pt-8">
-          {state === "collapsed" ? <Link className="text-primary" /> : <Logo />}
+          {state === "collapsed" ? (
+            <LinkIcon className="text-primary" />
+          ) : (
+            <Logo />
+          )}
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu className="space-y-2">
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => router.push("/dashboard")}
+                <Link
                   className={cn(
                     "flex items-center gap-3  text-[#aaaab8] rounded-r-full py-3 px-6 hover:translate-x-0.5 transition-transform duration-200",
                     pathname === "/dashboard" &&
                       "bg-[#1d1f2d] text-[#7AA2F7] border-l-4 border-[#7AA2F7] ",
                   )}
+                  href="/dashboard"
+                  about=""
                 >
                   <LayoutDashboard />
                   <span className="font-label text-xs uppercase tracking-[0.05em] font-medium">
                     Dashboard
                   </span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => router.push("/dashboard/links")}
+                </Link>
+                <Link
                   className={cn(
                     "flex items-center gap-3  text-[#aaaab8] rounded-r-full py-3 px-6 hover:translate-x-0.5 transition-transform duration-200",
                     pathname === "/dashboard/links" &&
                       "bg-[#1d1f2d] text-[#7AA2F7] border-l-4 border-[#7AA2F7] ",
                   )}
+                  href="/dashboard/links"
+                  about=""
                 >
-                  <Link />
+                  <LinkIcon />
                   <span className="font-label text-xs uppercase tracking-[0.05em] font-medium">
                     Links
                   </span>
-                </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>
@@ -82,7 +87,7 @@ export default function DashboardNav() {
                     alt={user.name}
                     referrerPolicy="no-referrer"
                   />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">AA</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>

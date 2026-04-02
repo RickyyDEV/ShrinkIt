@@ -18,7 +18,6 @@ const getUserUrls = authorized
     }),
   )
   .handler(async ({ context, input: { cursor, limit } }) => {
-    console.log(cursor);
     const urls = await prisma.url.findMany({
       take: limit,
       skip: cursor ? 1 : 0,

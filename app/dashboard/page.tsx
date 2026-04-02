@@ -35,7 +35,7 @@ export default function Page() {
         </p>
         <br />
         <br />
-        <div className="grid md:grid-cols-4 grid-rows-3 md:grid-rows-none gap-5">
+        <div className="grid md:grid-cols-3 grid-rows-3 md:grid-rows-none gap-5">
           <div className="bg-secondary/50 rounded-4xl p-10 space-y-4 shadow-2xl">
             <div>
               <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
@@ -46,7 +46,9 @@ export default function Page() {
               <h3 className="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-1">
                 Total de Cliques
               </h3>
-              <p className="text-4xl font-black headline-font">1.284.902</p>
+              <p className="text-4xl truncate font-black headline-font">
+                1.284.902
+              </p>
             </div>
           </div>
           <div className="bg-secondary/50 rounded-4xl p-10 space-y-4 shadow-2xl">
@@ -114,10 +116,10 @@ export default function Page() {
                 <div>
                   <div className="flex space-x-2">
                     <p className="text-md text-white">
-                      {"https://shrinkit.rihosting.com.br/" + e.code}
+                      {"https://shrinkit.rihosting.com.br/link/" + e.code}
                     </p>
                     <CopyButton
-                      text={"https://shrinkit.rihosting.com.br/" + e.code}
+                      text={"https://shrinkit.rihosting.com.br/link/" + e.code}
                     />
                   </div>
                   <span className="text-xs">{e.url}</span>

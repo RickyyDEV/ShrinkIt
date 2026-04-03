@@ -45,12 +45,20 @@ const addUserUrl = authorized
   .input(
     z.object({
       url: z.url(),
+      expiration: z.date().optional(),
+      password: z
+        .string()
+        .min(3, "Mínimo de 3 caracteres")
+        .max(12, "Máximo de 12 caracteres.")
+        .optional(),
     }),
   )
-  .handler(async ({ context, input: { url } }) => {
+  .handler(async ({ context, input: { url, expiration, password } }) => {
     await prisma.url.create({
       data: {
         url,
+        expireAt: expiration,
+        password,
         userId: context.user.id,
       },
     });

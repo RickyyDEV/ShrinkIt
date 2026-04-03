@@ -76,7 +76,8 @@ model Url {
   code      String   @unique @default(dbgenerated("substring(md5(random()::text), 1, 8)"))
   url       String
   accesses  Int      @default(0)
-
+  password  String?   
+  expireAt  DateTime?
   owner     User     @relation(fields: [userId], references: [id])
   userId    String
 

@@ -880,6 +880,8 @@ export const UrlScalarFieldEnum = {
   code: 'code',
   url: 'url',
   accesses: 'accesses',
+  password: 'password',
+  expireAt: 'expireAt',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

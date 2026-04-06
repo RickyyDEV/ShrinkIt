@@ -18,12 +18,22 @@ const getUserUrls = authorized
         })
         .optional(),
       limit: z.number().default(10),
+      search: z.string().optional(),
     }),
   )
-  .handler(async ({ context, input: { cursor, limit } }) => {
+  .handler(async ({ context, input: { cursor, limit, search } }) => {
     try {
+      const where = {
+        userId: context.user.id,
+        ...(search && {
+          url: {
+            contains: search,
+            mode: "insensitive" as const,
+          },
+        }),
+      };
       const urls = await prisma.url.findMany({
-        take: limit,
+        take: limit + 1,
         skip: cursor ? 1 : 0,
         cursor: cursor
           ? {
@@ -34,21 +44,16 @@ const getUserUrls = authorized
             }
           : undefined,
         orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-        where: {
-          userId: context.user.id,
-        },
+        where,
       });
-      const id = urls.length ? urls[urls.length - 1].id : null;
-      const createdAt = urls.length ? urls[urls.length - 1].createdAt : null;
+      const hasNextPage = urls.length > limit;
+      const items = hasNextPage ? urls.slice(0, limit) : urls;
+      const lastItem = items.length ? items[items.length - 1] : null;
       return {
-        urls,
-        cursor:
-          urls.length === limit
-            ? {
-                id, // era cursor.cursor
-                createdAt,
-              }
-            : null,
+        urls: items,
+        cursor: hasNextPage
+          ? { id: lastItem!.id, createdAt: lastItem!.createdAt }
+          : null,
       };
     } catch (error) {
       console.error(error);
@@ -74,13 +79,19 @@ const addUserUrl = authorized
   .handler(
     async ({ context, input: { url, expiration, password }, errors }) => {
       try {
-        const testLink = await fetch(url);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
 
-        if (!testLink.ok) {
-          throw new ORPCError("URL inválida");
-        }
-      } catch (error) {
-        throw new ORPCError("URL inválida");
+        const testLink = await fetch(url, {
+          method: "HEAD",
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeout);
+
+        if (!testLink.ok) throw new ORPCError("URL inválida ou inacessível");
+      } catch {
+        throw new ORPCError("URL inválida ou inacessível");
       }
       try {
         await prisma.url.create({

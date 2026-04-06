@@ -27,9 +27,14 @@ import { ErrorBoundary } from "@/app/components/dashboard/error-boundary";
 import { Button } from "@/app/components/ui/button";
 import { useConfirmDeleteModal } from "@/app/components/dashboard/links/remove/remove-store";
 import RemoveModal from "@/app/components/dashboard/links/remove/remove-modal";
+import SearchComponent from "@/app/components/dashboard/links/search";
+import { useQueryState } from "nuqs";
 
 export default function Page() {
   const { openModal } = useConfirmDeleteModal();
+  const [search] = useQueryState("s", {
+    defaultValue: "",
+  });
   const {
     data,
     isLoading,
@@ -45,6 +50,7 @@ export default function Page() {
       input: (cursor: any) => {
         return {
           limit: 10,
+          search,
           cursor: cursor && {
             createdAt: cursor.createdAt,
             id: cursor.id,
@@ -55,27 +61,39 @@ export default function Page() {
   );
   const urls = data?.pages?.flatMap((e) => e.urls) ?? [];
   return (
-    <div className="space-y-20">
-      <div className="flex justify-between">
-        <div>
-          <h1 className="text-4xl font-extrabold font-[Manrope] text-white tracking-tight">
-            Meus links
-          </h1>
-          <p className="text-gray-400 mt-2 text-lg">
-            Gerencie e monitore todos os seus links encurtados.
-          </p>
+    <div className="space-y-5">
+      <div className="space-y-10">
+        <div className="flex justify-between">
+          <div>
+            <h1 className="text-4xl font-extrabold font-[Manrope] text-white tracking-tight">
+              Meus links
+            </h1>
+            <p className="text-gray-400 mt-2 text-lg">
+              Gerencie e monitore todos os seus links encurtados.
+            </p>
+          </div>
+          <ErrorBoundary>
+            <AddLinkModal />
+          </ErrorBoundary>
         </div>
-        <ErrorBoundary>
-          <AddLinkModal />
-        </ErrorBoundary>
+        <SearchComponent />
       </div>
 
       {isError && (
         <div className="flex flex-col items-center justify-center">
           <MessageSquareWarning size={60} />
-          <h1 className="text-2xl max-w-1/3 text-center">
+          <h1 className="text-2xl max-w-1/3 text-center font-[Nunito]">
             Ocorreu um erro ao carregar os seus links, tente novamente mais
             tarde.
+          </h1>
+          <p className="text-center">Será que você já adicionou algum link?</p>
+        </div>
+      )}
+      {!isLoading && urls && urls.length === 0 && (
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <MessageSquareWarning size={60} />
+          <h1 className="text-2xl max-w-1/3 text-center font-[Nunito]">
+            Nenhum link encontrado.
           </h1>
           <p className="text-center">Será que você já adicionou algum link?</p>
         </div>
@@ -93,7 +111,7 @@ export default function Page() {
             <TableCaption>
               {hasNextPage && !isFetchingNextPage && (
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   className="w-fit text-primary underline"
                   onClick={() => {
                     if (hasNextPage) {

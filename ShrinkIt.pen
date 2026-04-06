@@ -3538,6 +3538,18 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "EZ127",
+      "x": 4041,
+      "y": -105,
+      "name": "Frame 1",
+      "clip": true,
+      "width": 5,
+      "height": 1,
+      "fill": "#FFFFFF",
+      "layout": "none"
     }
   ]
 }

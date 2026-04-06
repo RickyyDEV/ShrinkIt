@@ -6,6 +6,7 @@ import { SessionProvider } from "../(auth)/user-context";
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Providers } from "../rpc/client/providers";
 import { Toaster } from "../components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default async function Layout({
   children,
@@ -23,8 +24,10 @@ export default async function Layout({
           <SessionProvider value={{ user: user.user, session: user.session }}>
             <Providers>
               <TooltipProvider>
-                <SidebarWrapper>{children}</SidebarWrapper>
-                <Toaster />
+                <NuqsAdapter>
+                  <SidebarWrapper>{children}</SidebarWrapper>
+                  <Toaster />
+                </NuqsAdapter>
               </TooltipProvider>
             </Providers>
           </SessionProvider>

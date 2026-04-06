@@ -1,7 +1,6 @@
 "use client";
-import { Button } from "@/app/components/ui/button";
-import { client, orpc } from "@/app/rpc/orpc";
-import { Loader, Loader2, MessageSquareWarning, Plus, X } from "lucide-react";
+import { orpc } from "@/app/rpc/orpc";
+import { EllipsisIcon, Loader2, MessageSquareWarning } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import AddLinkModal from "@/app/components/dashboard/links/modal";
 import {
@@ -9,21 +8,49 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/app/components/ui/table";
-import type { Url } from "@/app/(database)/generated/client";
+import Link from "vinext/shims/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+import { ErrorBoundary } from "@/app/components/dashboard/error-boundary";
+import { Button } from "@/app/components/ui/button";
+import { useConfirmDeleteModal } from "@/app/components/dashboard/links/remove/remove-store";
+import RemoveModal from "@/app/components/dashboard/links/remove/remove-modal";
 
 export default function Page() {
-  const { data, isLoading, isError, hasNextPage } = useInfiniteQuery(
+  const { openModal } = useConfirmDeleteModal();
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
     orpc.url.getById.infiniteOptions({
       initialPageParam: undefined,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      input: (pageParam: any) => ({
-        limit: 10,
-        cursor: pageParam,
-      }),
+      getNextPageParam: (lastPage) =>
+        lastPage.cursor?.id != null ? lastPage.cursor : undefined,
+      input: (cursor: any) => {
+        return {
+          limit: 10,
+          cursor: cursor && {
+            createdAt: cursor.createdAt,
+            id: cursor.id,
+          },
+        };
+      },
     }),
   );
   const urls = data?.pages?.flatMap((e) => e.urls) ?? [];
@@ -38,8 +65,9 @@ export default function Page() {
             Gerencie e monitore todos os seus links encurtados.
           </p>
         </div>
-
-        <AddLinkModal />
+        <ErrorBoundary>
+          <AddLinkModal />
+        </ErrorBoundary>
       </div>
 
       {isError && (
@@ -62,30 +90,84 @@ export default function Page() {
       {!isLoading && urls && urls.length > 0 && (
         <>
           <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>
+              {hasNextPage && !isFetchingNextPage && (
+                <Button
+                  variant="outline"
+                  className="w-fit text-primary underline"
+                  onClick={() => {
+                    if (hasNextPage) {
+                      fetchNextPage();
+                    }
+                  }}
+                >
+                  Carregar mais...
+                </Button>
+              )}
+              {isFetchingNextPage && (
+                <div className="flex justify-center items-center gap-2 text-lg">
+                  <Loader2 className="animate-spin" size={25} />
+                  Carregando...
+                </div>
+              )}
+              <p> Mostrando {urls.length} links</p>
+            </TableCaption>
+            <TableFooter></TableFooter>
             <TableHeader>
               <TableRow>
                 <TableHead>Link curto</TableHead>
                 <TableHead>URL de destino</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
+                <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {urls.map((a, _id) => (
                 <TableRow key={_id}>
                   <TableCell className="font-medium text-primary">
-                    https://shrinkit.rihosting.com.br/link/{a.code}
+                    <Link
+                      target="_blank"
+                      href={"https://shrinkit.rihosting.com.br/link/" + a.code}
+                    >
+                      https://shrinkit.rihosting.com.br/link/{a.code}
+                    </Link>
                   </TableCell>
                   <TableCell>{a.url}</TableCell>
-                  <TableCell>Credit Card</TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="dark:focus-visible:ring-0 dark:focus-visible:ring-offset-0"
+                        >
+                          <EllipsisIcon size={20} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>Link</DropdownMenuLabel>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem>Editar</DropdownMenuItem>
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onClick={() => openModal(a.id)}
+                          >
+                            Remover
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </>
       )}
+      <ErrorBoundary>
+        <RemoveModal />
+      </ErrorBoundary>
     </div>
   );
 }

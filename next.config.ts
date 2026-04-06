@@ -1,5 +1,4 @@
 import type { NextConfig } from "vinext";
-import { env } from "./env";
 
 const nextConfig: NextConfig = {
   headers: async () => {

@@ -22,18 +22,19 @@ import {
 } from "../../ui/dialog";
 import { FieldGroup } from "../../ui/field";
 import { Input } from "../../ui/input";
-import z from "zod";
+import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { orpc } from "@/app/rpc/orpc";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Label } from "../../ui/label";
 import { Separator } from "../../ui/separator";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { Calendar } from "../../ui/calendar";
 import { format } from "date-fns";
+import { isDefinedError } from "@orpc/client";
 
 const formSchema = z.object({
   url: z.url(),
@@ -48,15 +49,30 @@ const formSchema = z.object({
 export default function AddLinkModal() {
   const [isLoading, startAddUrl] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState<Date>();
-  const { mutate } = useMutation(
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, error } = useMutation(
     orpc.url.add.mutationOptions({
-      onError: (e) =>
+      onError: async (e) => {
         toast.error("Ocorreu um erro ao tentar encurtar URL.", {
           description: e.message,
-        }),
-      onSuccess: ({ ok }) =>
-        ok && toast.success("URL encurtado com sucesso!") && setIsOpen(false),
+        });
+      },
+      throwOnError: false,
+      onSuccess: async ({ ok }) => {
+        if (ok) {
+          toast.success("URL encurtado com sucesso!");
+          setIsOpen(false);
+          await queryClient.refetchQueries({
+            queryKey: orpc.url.getById.infiniteKey({
+              initialPageParam: undefined,
+              input: (pageParam: any) => ({
+                limit: 10,
+                cursor: pageParam,
+              }),
+            }),
+          });
+        }
+      },
     }),
   );
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,8 +82,15 @@ export default function AddLinkModal() {
     },
   });
   function onSubmit(data: z.infer<typeof formSchema>) {
-    startAddUrl(() => {
-      mutate(data);
+    if (data.expiration && data.expiration < new Date()) {
+      form.setError("expiration", {
+        message: "A data de expiração deve ser no futuro.",
+      });
+      toast.error("A data de expiração deve ser no futuro.");
+      return;
+    }
+    startAddUrl(async () => {
+      const mutation = await mutateAsync(data);
     });
   }
   return (

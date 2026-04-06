@@ -6,13 +6,13 @@ import babel from "@rolldown/plugin-babel";
 import "./env";
 export default defineConfig({
   plugins: [
-    babel({
-      presets: [
-        reactCompilerPreset({
-          target: "19",
-        }),
-      ],
-    }),
+    // babel({
+    //   presets: [
+    //     reactCompilerPreset({
+    //       target: "19",
+    //     }),
+    //   ],
+    // }),
     tailwindcss(),
     vinext(),
   ],

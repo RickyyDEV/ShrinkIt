@@ -14,7 +14,6 @@ import { useQuery } from "@tanstack/react-query";
 import { orpc } from "../rpc/orpc";
 import { Label } from "../components/ui/label";
 import { CopyButton } from "../components/dashboard/copy-button";
-
 export default function Page() {
   const { user, session } = useSession();
   const { data, isLoading } = useQuery(
@@ -109,15 +108,18 @@ export default function Page() {
         {!isLoading && data?.urls != undefined && data.urls.length > 0 && (
           <div className="space-y-5">
             {data.urls.map((e) => (
-              <div className="flex items-center space-x-2 ">
+              <div className="flex items-center space-x-2" key={e.id}>
                 <div className="rounded-lg bg-primary p-2">
                   <Link2 className="text-white" />
                 </div>
                 <div>
                   <div className="flex space-x-2">
-                    <p className="text-md text-white">
+                    <Link
+                      href={"https://shrinkit.rihosting.com.br/link/" + e.code}
+                      className="text-md text-white"
+                    >
                       {"https://shrinkit.rihosting.com.br/link/" + e.code}
-                    </p>
+                    </Link>
                     <CopyButton
                       text={"https://shrinkit.rihosting.com.br/link/" + e.code}
                     />

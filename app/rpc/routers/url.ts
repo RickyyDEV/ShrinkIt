@@ -1,6 +1,9 @@
+"use server";
+
 import z from "zod";
 import { authorized } from "../procedure";
 import { prisma } from "@/app/(database)/database";
+import { ORPCError } from "@orpc/client";
 
 const getUserUrls = authorized
   .route({
@@ -18,24 +21,39 @@ const getUserUrls = authorized
     }),
   )
   .handler(async ({ context, input: { cursor, limit } }) => {
-    const urls = await prisma.url.findMany({
-      take: limit,
-      skip: cursor ? 1 : 0,
-      cursor: cursor
-        ? {
-            createdAt_id: {
-              createdAt: cursor.createdAt,
-              id: cursor.id,
-            },
-          }
-        : undefined,
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-      where: {
-        userId: context.user.id,
-      },
-    });
-    const nextCursor = urls.length ? urls[urls.length - 1].id : null;
-    return { urls, nextCursor };
+    try {
+      const urls = await prisma.url.findMany({
+        take: limit,
+        skip: cursor ? 1 : 0,
+        cursor: cursor
+          ? {
+              createdAt_id: {
+                createdAt: cursor.createdAt,
+                id: cursor.id,
+              },
+            }
+          : undefined,
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        where: {
+          userId: context.user.id,
+        },
+      });
+      const id = urls.length ? urls[urls.length - 1].id : null;
+      const createdAt = urls.length ? urls[urls.length - 1].createdAt : null;
+      return {
+        urls,
+        cursor:
+          urls.length === limit
+            ? {
+                id, // era cursor.cursor
+                createdAt,
+              }
+            : null,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new ORPCError("Erro ao buscar URLs");
+    }
   });
 
 const addUserUrl = authorized
@@ -53,16 +71,59 @@ const addUserUrl = authorized
         .optional(),
     }),
   )
-  .handler(async ({ context, input: { url, expiration, password } }) => {
-    await prisma.url.create({
-      data: {
-        url,
-        expireAt: expiration,
-        password,
-        userId: context.user.id,
-      },
-    });
-    return { ok: true };
-  });
+  .handler(
+    async ({ context, input: { url, expiration, password }, errors }) => {
+      try {
+        const testLink = await fetch(url);
 
-export const url = { getById: getUserUrls, add: addUserUrl };
+        if (!testLink.ok) {
+          throw new ORPCError("URL inválida");
+        }
+      } catch (error) {
+        throw new ORPCError("URL inválida");
+      }
+      try {
+        await prisma.url.create({
+          data: {
+            url,
+            expireAt: expiration,
+            password: password && (await Bun.password.hash(password)),
+            userId: context.user.id,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        throw new ORPCError("Erro ao criar URL");
+      }
+
+      return { ok: true };
+    },
+  );
+
+const removeUserUrl = authorized
+  .route({
+    method: "POST",
+  })
+  .input(
+    z.object({
+      id: z.number(),
+    }),
+  )
+  .handler(async ({ context, input: { id } }) => {
+    try {
+      await prisma.url.delete({
+        where: {
+          id,
+          userId: context.user.id,
+        },
+      });
+      return { ok: true };
+    } catch (error) {
+      throw new ORPCError("URL não encontrada, tente novamente mais tarde");
+    }
+  });
+export const url = {
+  getById: getUserUrls,
+  add: addUserUrl,
+  remove: removeUserUrl,
+};

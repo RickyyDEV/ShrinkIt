@@ -133,8 +133,34 @@ const removeUserUrl = authorized
       throw new ORPCError("URL não encontrada, tente novamente mais tarde");
     }
   });
+
+const getInitialData = authorized
+  .route({
+    method: "GET",
+  })
+  .handler(async ({ context }) => {
+    try {
+      const [urls, count] = await prisma.$transaction([
+        prisma.url.findMany({
+          where: {
+            userId: context.user.id,
+          },
+          take: 3,
+        }),
+        prisma.url.count({
+          where: {
+            userId: context.user.id,
+          },
+        }),
+      ]);
+      return { urls, count };
+    } catch (error) {
+      throw new ORPCError("URL não encontrada, tente novamente mais tarde");
+    }
+  });
 export const url = {
   getById: getUserUrls,
   add: addUserUrl,
   remove: removeUserUrl,
+  initial: getInitialData,
 };

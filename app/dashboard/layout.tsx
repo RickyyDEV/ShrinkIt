@@ -7,6 +7,7 @@ import { TooltipProvider } from "../components/ui/tooltip";
 import { Providers } from "../rpc/client/providers";
 import { Toaster } from "../components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ErrorBoundary } from "../components/dashboard/error-boundary";
 
 export default async function Layout({
   children,
@@ -25,7 +26,9 @@ export default async function Layout({
             <Providers>
               <TooltipProvider>
                 <NuqsAdapter>
-                  <SidebarWrapper>{children}</SidebarWrapper>
+                  <SidebarWrapper>
+                    <ErrorBoundary>{children}</ErrorBoundary>
+                  </SidebarWrapper>
                   <Toaster />
                 </NuqsAdapter>
               </TooltipProvider>

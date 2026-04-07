@@ -3,7 +3,6 @@ import {
   ActivitySquare,
   Archive,
   ArrowRight,
-  CornerLeftUpIcon,
   Link2,
   Loader2,
   MouseIcon,
@@ -12,17 +11,11 @@ import { useSession } from "../(auth)/user-context";
 import Link from "vinext/shims/link";
 import { useQuery } from "@tanstack/react-query";
 import { orpc } from "../rpc/orpc";
-import { Label } from "../components/ui/label";
 import { CopyButton } from "../components/dashboard/copy-button";
+import { Skeleton } from "../components/ui/skeleton";
 export default function Page() {
   const { user, session } = useSession();
-  const { data, isLoading } = useQuery(
-    orpc.url.getById.queryOptions({
-      input: {
-        limit: 3,
-      },
-    }),
-  );
+  const { data, isLoading } = useQuery(orpc.url.initial.queryOptions());
   return (
     <div className="space-y-10">
       <div>
@@ -46,7 +39,11 @@ export default function Page() {
                 Total de Cliques
               </h3>
               <p className="text-4xl truncate font-black headline-font">
-                1.284.902
+                {isLoading ? (
+                  <Skeleton className="h-10 w-1/3" />
+                ) : (
+                  <p className="text-4xl font-black headline-font">1.284.902</p>
+                )}
               </p>
             </div>
           </div>
@@ -60,20 +57,14 @@ export default function Page() {
               <h3 className="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-1">
                 Links ativos
               </h3>
-              <p className="text-4xl font-black headline-font">10</p>
-            </div>
-          </div>
-          <div className="bg-secondary/50 rounded-4xl p-10 space-y-4 shadow-2xl">
-            <div>
-              <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
-                <CornerLeftUpIcon />
-              </div>
-            </div>
-            <div>
-              <h3 className="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-1">
-                URLs criadas
-              </h3>
-              <p className="text-4xl font-black headline-font">10</p>
+
+              {isLoading ? (
+                <Skeleton className="h-10 w-1/5" />
+              ) : (
+                <p className="text-4xl font-black headline-font">
+                  {data?.count}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -115,6 +106,7 @@ export default function Page() {
                 <div>
                   <div className="flex space-x-2">
                     <Link
+                      target={"_blank"}
                       href={"https://shrinkit.rihosting.com.br/link/" + e.code}
                       className="text-md text-white"
                     >

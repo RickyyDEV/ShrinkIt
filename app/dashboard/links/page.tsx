@@ -23,12 +23,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { ErrorBoundary } from "@/app/components/dashboard/error-boundary";
 import { Button } from "@/app/components/ui/button";
 import { useConfirmDeleteModal } from "@/app/components/dashboard/links/remove/remove-store";
 import RemoveModal from "@/app/components/dashboard/links/remove/remove-modal";
 import SearchComponent from "@/app/components/dashboard/links/search";
 import { useQueryState } from "nuqs";
+import { CopyButton } from "@/app/components/dashboard/copy-button";
 
 export default function Page() {
   const { openModal } = useConfirmDeleteModal();
@@ -72,9 +72,7 @@ export default function Page() {
               Gerencie e monitore todos os seus links encurtados.
             </p>
           </div>
-          <ErrorBoundary>
-            <AddLinkModal />
-          </ErrorBoundary>
+          <AddLinkModal />
         </div>
         <SearchComponent />
       </div>
@@ -183,9 +181,7 @@ export default function Page() {
           </Table>
         </>
       )}
-      <ErrorBoundary>
-        <RemoveModal />
-      </ErrorBoundary>
+      <RemoveModal />
     </div>
   );
 }

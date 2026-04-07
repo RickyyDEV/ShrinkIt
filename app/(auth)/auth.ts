@@ -4,8 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { env } from "@/env";
 import { prisma } from "../(database)/database";
 import { RedisClient } from "bun";
-
-const client = new RedisClient(env.REDIS_URL);
+import { client } from "../(database)/redis";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

@@ -1,6 +1,8 @@
 import Baker from "cronbake";
 
+// Create a new Baker instance
 const baker = Baker.create();
+
 const dailyJob = baker.add({
   name: "daily-job",
   cron: "@every_second", // Runs daily at midnight
@@ -9,4 +11,4 @@ const dailyJob = baker.add({
   },
 });
 
-dailyJob.start();
+baker.bakeAll();

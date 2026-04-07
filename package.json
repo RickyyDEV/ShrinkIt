@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:web": "bun --bun vinext dev",
-    "dev:cron": "bun run app/workers/cron.ts",
+    "dev:cron": "bun --bun run app/workers/cron.ts",
     "dev": "concurrently -k -n \"WEB,CRON\" -c \"bgBlue.bold,bgMagenta.bold\" \"bun run dev:web\" \"bun run dev:cron\"",
     "build": "bun --bun vinext build",
     "start": "bun --bun vinext start",

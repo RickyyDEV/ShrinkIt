@@ -14,7 +14,7 @@ import { orpc } from "../rpc/orpc";
 import { CopyButton } from "../components/dashboard/copy-button";
 import { Skeleton } from "../components/ui/skeleton";
 export default function Page() {
-  const { user, session } = useSession();
+  const { user } = useSession();
   const { data, isLoading } = useQuery(orpc.url.initial.queryOptions());
   return (
     <div className="space-y-10">
@@ -109,11 +109,12 @@ export default function Page() {
                       target={"_blank"}
                       href={"https://shrinkit.rihosting.com.br/link/" + e.code}
                       prefetch={false}
-                      className="text-md text-white"
+                      className="text-md text-white truncate"
                     >
                       {"https://shrinkit.rihosting.com.br/link/" + e.code}
                     </Link>
                     <CopyButton
+                      className="truncate"
                       text={"https://shrinkit.rihosting.com.br/link/" + e.code}
                     />
                   </div>

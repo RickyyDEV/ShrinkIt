@@ -110,6 +110,7 @@ export default function Page() {
                     <Link
                       target={"_blank"}
                       href={"https://shrinkit.rihosting.com.br/link/" + e.code}
+                      // prefetch={false}
                       className="text-md text-white"
                     >
                       {"https://shrinkit.rihosting.com.br/link/" + e.code}

@@ -7,7 +7,7 @@ const baker = Baker.create();
 
 const dailyJob = baker.add({
   name: "daily-job",
-  cron: "@every_10_seconds", // Runs daily at midnight
+  cron: "@every_minute",
   immediate: true,
   callback: async () => {
     let cursor = 0;

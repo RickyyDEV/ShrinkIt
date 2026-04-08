@@ -42,7 +42,9 @@ export default function Page() {
                 {isLoading ? (
                   <Skeleton className="h-10 w-1/3" />
                 ) : (
-                  <p className="text-4xl font-black headline-font">1.284.902</p>
+                  <p className="text-4xl font-black headline-font">
+                    {data.accesses}
+                  </p>
                 )}
               </p>
             </div>

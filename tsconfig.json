@@ -12,6 +12,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -22,6 +23,9 @@
   "include": [
     "src",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "data-cache-handler.mjs",
+    "data-cache-handler.mjs",
+    "next.config.ts"
   ]
 }

@@ -94,6 +94,11 @@ const addUserUrl = authorized
         throw new ORPCError("URL inválida ou inacessível");
       }
       try {
+        await prisma.url.count({
+          where: {
+            userId: context.user.id,
+          },
+        });
         await prisma.url.create({
           data: {
             url,
@@ -140,7 +145,7 @@ const getInitialData = authorized
   })
   .handler(async ({ context }) => {
     try {
-      const [urls, count] = await prisma.$transaction([
+      const [urls, count, accesses] = await prisma.$transaction([
         prisma.url.findMany({
           where: {
             userId: context.user.id,
@@ -152,8 +157,12 @@ const getInitialData = authorized
             userId: context.user.id,
           },
         }),
+        prisma.url.aggregate({
+          _sum: { accesses: true },
+          where: { userId: context.user.id },
+        }),
       ]);
-      return { urls, count };
+      return { urls, count, accesses: accesses._sum.accesses ?? 0 };
     } catch (error) {
       throw new ORPCError("URL não encontrada, tente novamente mais tarde");
     }

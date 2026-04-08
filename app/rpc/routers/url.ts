@@ -94,19 +94,21 @@ const addUserUrl = authorized
         throw new ORPCError("URL inválida ou inacessível");
       }
       try {
-        await prisma.url.count({
+        const count = await prisma.url.count({
           where: {
             userId: context.user.id,
           },
         });
-        await prisma.url.create({
-          data: {
-            url,
-            expireAt: expiration,
-            password: password && (await Bun.password.hash(password)),
-            userId: context.user.id,
-          },
-        });
+        if (count < 3)
+          await prisma.url.create({
+            data: {
+              url,
+              expireAt: expiration,
+              password: password && (await Bun.password.hash(password)),
+              userId: context.user.id,
+            },
+          });
+        else throw new ORPCError("Você só pode criar até 3 URLs encurtadas");
       } catch (error) {
         console.error(error);
         throw new ORPCError("Erro ao criar URL");

@@ -15,6 +15,8 @@ export async function GET(
       },
     });
     if (url) {
+      if (url.password) {
+      }
       await client.incr(`clicks:${url.code}`);
       return NextResponse.redirect(url.url);
     } else {

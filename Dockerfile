@@ -20,4 +20,4 @@ ENV NODE_ENV=production
 COPY --from=builder /app ./
 
 EXPOSE 3000
-CMD ["bun", "run", "start"]
+CMD ["concurrently -k -n \"WEB,CRON\" -c \"bgBlue.bold,bgMagenta.bold\" \"bun run dev:web\" \"bun run dev:cron\""]

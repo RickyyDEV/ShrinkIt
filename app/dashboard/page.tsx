@@ -43,7 +43,7 @@ export default function Page() {
                   <Skeleton className="h-10 w-1/3" />
                 ) : (
                   <p className="text-4xl font-black headline-font">
-                    {data.accesses}
+                    {data?.accesses}
                   </p>
                 )}
               </p>

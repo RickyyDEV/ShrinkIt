@@ -38,15 +38,13 @@ export default function Page() {
               <h3 className="text-on-surface-variant text-xs uppercase tracking-widest font-bold mb-1">
                 Total de Cliques
               </h3>
-              <p className="text-4xl truncate font-black headline-font">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-1/3" />
-                ) : (
-                  <p className="text-4xl font-black headline-font">
-                    {data?.accesses}
-                  </p>
-                )}
-              </p>
+              {isLoading ? (
+                <Skeleton className="h-10 w-1/3" />
+              ) : (
+                <p className="text-4xl truncate font-black headline-font">
+                  {data?.accesses}
+                </p>
+              )}
             </div>
           </div>
           <div className="bg-secondary/50 rounded-4xl p-10 space-y-4 shadow-2xl">

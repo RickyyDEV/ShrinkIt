@@ -85,6 +85,6 @@ model Url {
   updatedAt DateTime @updatedAt 
 
   @@unique([createdAt, id])
-  @@index([userId])
+  @@index([userId, expireAt])
   @@map("url")
 }

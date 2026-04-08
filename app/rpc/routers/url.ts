@@ -4,6 +4,9 @@ import z from "zod";
 import { authorized } from "../procedure";
 import { prisma } from "@/app/(database)/database";
 import { ORPCError } from "@orpc/client";
+import { password } from "bun";
+import { client } from "@/app/(database)/redis";
+import type { Url } from "@/app/(database)/generated/client";
 
 const getUserUrls = authorized
   .route({
@@ -44,6 +47,9 @@ const getUserUrls = authorized
             }
           : undefined,
         orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        omit: {
+          password: true,
+        },
         where,
       });
       const hasNextPage = urls.length > limit;
@@ -93,13 +99,13 @@ const addUserUrl = authorized
       } catch {
         throw new ORPCError("URL inválida ou inacessível");
       }
-      try {
-        const count = await prisma.url.count({
-          where: {
-            userId: context.user.id,
-          },
-        });
-        if (count < 3)
+      const count = await prisma.url.count({
+        where: {
+          userId: context.user.id,
+        },
+      });
+      if (count < 3)
+        try {
           await prisma.url.create({
             data: {
               url,
@@ -108,11 +114,11 @@ const addUserUrl = authorized
               userId: context.user.id,
             },
           });
-        else throw new ORPCError("Você só pode criar até 3 URLs encurtadas");
-      } catch (error) {
-        console.error(error);
-        throw new ORPCError("Erro ao criar URL");
-      }
+        } catch (error) {
+          console.error(error);
+          throw new ORPCError("Erro ao criar URL");
+        }
+      else throw new ORPCError("Você só pode criar até 3 URLs encurtadas");
 
       return { ok: true };
     },
@@ -169,9 +175,38 @@ const getInitialData = authorized
       throw new ORPCError("URL não encontrada, tente novamente mais tarde");
     }
   });
+
+const checkPassword = authorized
+  .route({
+    method: "GET",
+  })
+  .input(
+    z.object({
+      code: z.string().min(1).max(8),
+      password: z.string(),
+    }),
+  )
+  .handler(async ({ context, input: { code, password } }) => {
+    const url = await prisma.url.findUnique({
+      where: { code },
+    });
+    if (!url) throw new ORPCError("Este url não existe.");
+    if (!url?.password) throw new ORPCError("Este url não possui senha.");
+    const passwordCheck = Bun.password.verifySync(password, url.password);
+    if (passwordCheck) {
+      await client.incr(`clicks:${url.code}`);
+      return {
+        url: url.url,
+      };
+    } else {
+      throw new ORPCError("Senha incorreta.");
+    }
+  });
+
 export const url = {
   getById: getUserUrls,
   add: addUserUrl,
   remove: removeUserUrl,
   initial: getInitialData,
+  check: checkPassword,
 };

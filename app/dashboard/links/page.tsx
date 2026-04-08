@@ -133,7 +133,8 @@ export default function Page() {
               <TableRow>
                 <TableHead>Link curto</TableHead>
                 <TableHead>URL de destino</TableHead>
-                <TableHead></TableHead>
+                <TableHead>Acessos</TableHead>
+                <TableHead>Exipiração</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -148,6 +149,12 @@ export default function Page() {
                     </Link>
                   </TableCell>
                   <TableCell>{a.url}</TableCell>
+                  <TableCell>{a.accesses}</TableCell>
+                  <TableCell>
+                    {a.expireAt
+                      ? a.expireAt.toLocaleDateString()
+                      : "Indefinido"}
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

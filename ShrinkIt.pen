@@ -1,10 +1,10 @@
 {
-  "version": "2.9",
+  "version": "2.10",
   "children": [
     {
       "type": "frame",
       "id": "mLKT8",
-      "x": 662,
+      "x": 706,
       "y": 527,
       "name": "Main Layout",
       "width": 1440,
@@ -1419,7 +1419,7 @@
     {
       "type": "frame",
       "id": "FpD7Q",
-      "x": -843,
+      "x": -845,
       "y": 527,
       "name": "Links Page",
       "width": 1440,
@@ -2487,7 +2487,7 @@
     {
       "type": "frame",
       "id": "d23PO",
-      "x": 2202,
+      "x": 2307,
       "y": 527,
       "name": "Modal - Criar Link",
       "opacity": 0.85,
@@ -3541,15 +3541,343 @@
     },
     {
       "type": "frame",
-      "id": "EZ127",
-      "x": 4041,
-      "y": -105,
-      "name": "Frame 1",
-      "clip": true,
-      "width": 5,
-      "height": 1,
-      "fill": "#FFFFFF",
-      "layout": "none"
+      "id": "hNKvl",
+      "x": 3847,
+      "y": 527,
+      "name": "URL Protection Page",
+      "width": 1440,
+      "height": 900,
+      "fill": "#0c0d18",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "mHX0Q",
+          "name": "Top Bar",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "#11121e",
+          "padding": [
+            0,
+            32
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "pWuPP",
+              "name": "Logo Area",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "V1CLF",
+                  "name": "Logo Icon",
+                  "fill": "#87adff",
+                  "width": 28,
+                  "height": 28
+                },
+                {
+                  "type": "text",
+                  "id": "7hw9f",
+                  "name": "logoText",
+                  "fill": "#87adff",
+                  "content": "ShrinkIt",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7AAui",
+          "name": "Page Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ofiOk",
+              "name": "Protection Card",
+              "width": 440,
+              "fill": "#1d1f2d",
+              "cornerRadius": 20,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#00000060",
+                "offset": {
+                  "x": 0,
+                  "y": 16
+                },
+                "blur": 48
+              },
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lQRQ7",
+                  "name": "Card Header",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": [
+                    40,
+                    40,
+                    32,
+                    40
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "MOWP7",
+                      "name": "Lock Icon BG",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "#232534",
+                      "cornerRadius": 32,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "yqu7W",
+                          "name": "lockIcon",
+                          "width": 28,
+                          "height": 28,
+                          "iconFontName": "lock",
+                          "iconFontFamily": "lucide",
+                          "fill": "#87adff"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Mlj9C",
+                      "name": "cardTitle",
+                      "fill": "#ffffff",
+                      "content": "Link Protegido",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "2nQak",
+                      "name": "cardSubtitle",
+                      "fill": "#6b7280",
+                      "textGrowth": "fixed-width",
+                      "width": 320,
+                      "content": "Este link está protegido por senha.\nInsira a senha para continuar.",
+                      "lineHeight": 1.6,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "NAlAD",
+                  "name": "Divider",
+                  "opacity": 0.07,
+                  "fill": "#ffffff",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "njqkO",
+                  "name": "Card Body",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": [
+                    28,
+                    32,
+                    32,
+                    32
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RDqMX",
+                      "name": "Link Info",
+                      "width": "fill_container",
+                      "fill": "#141520",
+                      "cornerRadius": 10,
+                      "gap": 12,
+                      "padding": [
+                        14,
+                        16
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "kUTH1",
+                          "name": "linkIcon",
+                          "width": 16,
+                          "height": 16,
+                          "iconFontName": "link-2",
+                          "iconFontFamily": "lucide",
+                          "fill": "#87adff"
+                        },
+                        {
+                          "type": "text",
+                          "id": "k2EYQ",
+                          "name": "linkUrl",
+                          "fill": "#87adff",
+                          "content": "shrink.it/s3cr3t",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "medium"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aP2zR",
+                      "name": "Password Group",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "r3LWY",
+                          "name": "passLabel",
+                          "fill": "#d1d5db",
+                          "content": "Senha de acesso",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "medium"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LVQZw",
+                          "name": "Password Input Row",
+                          "width": "fill_container",
+                          "height": 48,
+                          "fill": "#141520",
+                          "cornerRadius": 10,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1.5,
+                            "fill": "#87adff"
+                          },
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "xe61y",
+                              "name": "Pass Input Area",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 10,
+                              "padding": [
+                                0,
+                                16
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "VNPkI",
+                                  "name": "passIconLeft",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "key-round",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#6b7280"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "0lSxC",
+                                  "name": "passPlaceholder",
+                                  "fill": "#4b5563",
+                                  "content": "Digite a senha...",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bMa8E",
+                              "name": "Eye Button",
+                              "width": 44,
+                              "height": "fill_container",
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "sb7WG",
+                                  "name": "eyeIcon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "eye",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#6b7280"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "4B8fV",
+                      "name": "Access Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "fill": "#87adff",
+                      "cornerRadius": 10,
+                      "gap": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "FnSHw",
+                          "name": "accessBtnIcon",
+                          "width": 16,
+                          "height": 16,
+                          "iconFontName": "arrow-right",
+                          "iconFontFamily": "lucide",
+                          "fill": "#0c0d18"
+                        },
+                        {
+                          "type": "text",
+                          "id": "eesVo",
+                          "name": "accessBtnText",
+                          "fill": "#0c0d18",
+                          "content": "Acessar Link",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "semibold"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

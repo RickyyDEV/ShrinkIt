@@ -23,16 +23,14 @@ export default async function Layout({
       <body>
         <main>
           <SessionProvider value={{ user: user.user, session: user.session }}>
-            <Providers>
-              <TooltipProvider>
-                <NuqsAdapter>
-                  <SidebarWrapper>
-                    <ErrorBoundary>{children}</ErrorBoundary>
-                  </SidebarWrapper>
-                  <Toaster />
-                </NuqsAdapter>
-              </TooltipProvider>
-            </Providers>
+            <TooltipProvider>
+              <NuqsAdapter>
+                <SidebarWrapper>
+                  <ErrorBoundary>{children}</ErrorBoundary>
+                </SidebarWrapper>
+                <Toaster />
+              </NuqsAdapter>
+            </TooltipProvider>
           </SessionProvider>
         </main>
       </body>

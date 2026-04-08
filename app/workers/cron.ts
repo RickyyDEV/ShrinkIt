@@ -5,13 +5,12 @@ import { prisma } from "../(database)/database";
 // Create a new Baker instance
 const baker = Baker.create();
 
-const dailyJob = baker.add({
-  name: "daily-job",
+const AccessesCount = baker.add({
+  name: "AccessesCount",
   cron: "@every_minute",
   immediate: true,
   callback: async () => {
     let cursor = 0;
-
     do {
       const [nextCursor, keys] = await client.scan(
         cursor,
@@ -40,6 +39,19 @@ const dailyJob = baker.add({
         await client.del(key);
       }
     } while (cursor !== 0);
+  },
+});
+
+const CheckExpirations = baker.add({
+  name: "CheckExpirations",
+  cron: "@daily",
+  immediate: true,
+  callback: async () => {
+    const { count } = await prisma.url.deleteMany({
+      where: {
+        expireAt: { lt: new Date() },
+      },
+    });
   },
 });
 

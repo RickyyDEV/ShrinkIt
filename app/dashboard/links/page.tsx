@@ -143,6 +143,7 @@ export default function Page() {
                   <TableCell className="font-medium text-primary">
                     <Link
                       target="_blank"
+                      prefetch={false}
                       href={"https://shrinkit.rihosting.com.br/link/" + a.code}
                     >
                       https://shrinkit.rihosting.com.br/link/{a.code}

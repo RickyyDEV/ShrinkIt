@@ -1,7 +1,8 @@
-import { Link } from "lucide-react";
+import { LinkIcon } from "lucide-react";
 import NavBar from "./components/navbar";
 import { Input } from "./components/ui/input";
 import Footer from "./components/footer";
+import Link from "vinext/shims/link";
 export default async function Page() {
   return (
     <main>
@@ -26,16 +27,19 @@ export default async function Page() {
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="bg[rgba(29, 31, 45, 0.7)] backdrop-blur-[20px] p-2 rounded-2xl flex flex-col md:flex-row gap-2 indigo-glow border border-outline-variant/10">
             <div className="grow flex items-center px-6 bg-surface-container-highest rounded-xl">
-              <Link className="mr-6" />
+              <LinkIcon className="mr-6" />
               <Input
                 className="w-full rounded-full md:text-lg placeholder:font-light focus-visible:ring-0 focus-visible:border-none bg-transparent border-none py-5 placeholder:text-gray-600"
                 placeholder="Cole sua URL aqui..."
                 type="text"
               />
             </div>
-            <button className="bg-primary text-white font-bold px-10 py-5 rounded-xl transition-all duration-300 hover:brightness-110 active:scale-95 shadow-lg shadow-primary/20">
+            <Link
+              href={"/dashboard/links"}
+              className="bg-primary text-white font-bold px-10 py-5 rounded-xl transition-all duration-300 hover:brightness-110 active:scale-95 shadow-lg shadow-primary/20"
+            >
               Encurtar URL
-            </button>
+            </Link>
           </div>
           <div className="flex gap-4 mt-4 ml-2">
             <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">

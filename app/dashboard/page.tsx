@@ -22,12 +22,10 @@ export default function Page() {
         <h1 className="text-4xl font-extrabold font-[Manrope] text-white tracking-tight">
           Olá, <span className="text-primary">{user.name}</span> 👋
         </h1>
-        <p className="text-gray-400 mt-2 text-lg">
+        <p className="text-gray-400 mt-2 mb-8 text-lg">
           Relatório dos seus links criados.
         </p>
-        <br />
-        <br />
-        <div className="grid md:grid-cols-3 grid-rows-3 md:grid-rows-none gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="bg-secondary/50 rounded-4xl p-10 space-y-4 shadow-2xl">
             <div>
               <div className="p-3 bg-primary/10 rounded-lg text-primary w-fit">
@@ -97,28 +95,31 @@ export default function Page() {
           </div>
         )}
         {!isLoading && data?.urls != undefined && data.urls.length > 0 && (
-          <div className="space-y-5">
+          <div className="space-y-3">
             {data.urls.map((e) => (
-              <div className="flex items-center space-x-2" key={e.id}>
-                <div className="rounded-lg bg-primary p-2">
-                  <Link2 className="text-white" />
+              <div className="flex items-center gap-3 min-w-0" key={e.id}>
+                <div className="rounded-lg bg-primary p-2 shrink-0">
+                  <Link2 className="text-white size-4" />
                 </div>
-                <div>
-                  <div className="flex space-x-2">
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 min-w-0">
                     <Link
-                      target={"_blank"}
+                      target="_blank"
                       href={"https://shrinkit.rihosting.com.br/link/" + e.code}
                       prefetch={false}
-                      className="text-md text-white truncate"
+                      className="text-sm text-white truncate min-w-0 flex-1 hover:underline"
                     >
-                      {"https://shrinkit.rihosting.com.br/link/" + e.code}
+                      {"shrinkit.rihosting.com.br/link/" + e.code}
                     </Link>
                     <CopyButton
-                      className="truncate"
+                      className="shrink-0"
                       text={"https://shrinkit.rihosting.com.br/link/" + e.code}
                     />
                   </div>
-                  <span className="text-xs">{e.url}</span>
+                  <span className="text-xs text-gray-400 truncate block">
+                    {e.url}
+                  </span>
                 </div>
               </div>
             ))}

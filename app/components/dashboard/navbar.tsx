@@ -25,6 +25,7 @@ import {
 import { authClient } from "@/app/(auth)/auth-client";
 import { LogOut } from "@/app/(auth)/actions";
 import Link from "vinext/shims/link";
+import { ErrorBoundary } from "./error-boundary";
 
 export default function DashboardNav() {
   const { state } = useSidebar();
@@ -95,8 +96,7 @@ export default function DashboardNav() {
                 </div>
                 <Button
                   onClick={async () => {
-                    const logout = await LogOut();
-                    if (logout) router.push("/auth/");
+                    await LogOut();
                   }}
                   variant={"destructive"}
                   className={"rounded-md"}

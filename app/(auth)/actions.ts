@@ -2,6 +2,7 @@
 
 import { headers } from "vinext/shims/headers";
 import { auth } from "./auth";
+import { redirect } from "vinext/shims/navigation";
 
 export async function GoogleLogin() {
   return await auth.api.signInSocial({
@@ -14,13 +15,9 @@ export async function GoogleLogin() {
 }
 
 export async function LogOut() {
-  return await auth.api.signOut({
-    headers: await headers(),
-  });
-}
-
-export async function getSession() {
-  return await auth.api.getSession({
-    headers: await headers(),
-  });
+  await auth.api
+    .signOut({
+      headers: await headers(),
+    })
+    .then((e) => e.success && redirect("/auth/"));
 }

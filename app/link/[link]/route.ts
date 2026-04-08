@@ -8,6 +8,7 @@ export async function GET(
   { params }: { params: { link: string } },
 ) {
   const { link } = params;
+  console.log("TA AQ");
   if (link.length === 8) {
     const url = await prisma.url.findUnique({
       where: {
